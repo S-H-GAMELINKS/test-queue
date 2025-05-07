@@ -4,6 +4,8 @@
 
 source 'https://rubygems.org'
 
+gem 'drb', '~> 2.2'
+gem 'mutex_m', '~> 0.3.0'
 gem 'turnip', '~> 4.4'
 
 gemspec path: '../'
