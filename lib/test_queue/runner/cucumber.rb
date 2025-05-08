@@ -4,6 +4,17 @@ require 'cucumber'
 require 'cucumber/rspec/disable_option_parser'
 require 'cucumber/cli/main'
 
+if defined?(Cucumber::Ast::TreeWalker)
+  class Cucumber::Ast::TreeWalker
+    private
+    def extract_method_name_from(call_stack)
+      call_stack[0].match(/in `(.*)'/).captures[0]
+    rescue => e
+      String.new
+    end
+  end
+end
+
 module Cucumber
   module Ast
     class Features
@@ -54,7 +65,13 @@ module TestQueue
         runtime = @test_framework.runtime
         runtime.features = iterator
 
-        @test_framework.cli.execute!(runtime)
+        begin
+          @test_framework.cli.execute!(runtime)
+        rescue => e
+          warn "[worker #{Process.pid}] uncaught exception: #{e.class}: #{e.message}"
+          warn e.backtrace.join("\n")
+          exit! 1
+        end
 
         if runtime.respond_to?(:summary_report, true)
           runtime.send(:summary_report).test_cases.total_failed
