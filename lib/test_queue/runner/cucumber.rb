@@ -7,10 +7,11 @@ require 'cucumber/cli/main'
 if defined?(Cucumber::Ast::TreeWalker)
   class Cucumber::Ast::TreeWalker
     private
+
     def extract_method_name_from(call_stack)
       call_stack[0].match(/in `(.*)'/).captures[0]
-    rescue => e
-      String.new
+    rescue
+      +''
     end
   end
 end
