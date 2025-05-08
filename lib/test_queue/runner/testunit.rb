@@ -16,9 +16,9 @@ module TestQueue
           @tests = IteratorWrapper.new(iterator)
         end
 
-        def run(*)
+        def run(...)
           @started = true
-          super
+          super(...)
         end
 
         def size
