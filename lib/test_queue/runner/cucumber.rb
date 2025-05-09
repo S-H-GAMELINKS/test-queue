@@ -4,18 +4,6 @@ require 'cucumber'
 require 'cucumber/rspec/disable_option_parser'
 require 'cucumber/cli/main'
 
-if defined?(Cucumber::Ast::TreeWalker)
-  class Cucumber::Ast::TreeWalker
-    private
-
-    def extract_method_name_from(call_stack)
-      call_stack[0].match(/in `(.*)'/).captures[0]
-    rescue
-      +''
-    end
-  end
-end
-
 module Cucumber
   module Ast
     class Features
@@ -25,6 +13,18 @@ module Cucumber
     class Feature
       def to_s
         title
+      end
+    end
+
+    class TreeWalker
+      private
+
+      def extract_method_name_from(call_stack)
+        if RUBY_VERSION.to_f == 3.4
+          call_stack[0].match(/in '(.*)'/).captures[0]
+        else
+          call_stack[0].match(/in `(.*)'/).captures[0]
+        end
       end
     end
   end
