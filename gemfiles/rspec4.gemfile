@@ -4,6 +4,8 @@
 
 source 'https://rubygems.org'
 
+gem 'drb', '~> 2.2'
+gem 'mutex_m', '~> 0.3.0'
 gem 'rspec', github: 'rspec/rspec-metagem', branch: '4-0-dev'
 gem 'rspec-core', github: 'rspec/rspec-core', branch: '4-0-dev'
 gem 'rspec-expectations', github: 'rspec/rspec-expectations', branch: '4-0-dev'

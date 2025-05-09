@@ -4,6 +4,8 @@
 
 source 'https://rubygems.org'
 
+gem 'drb', '~> 2.2'
 gem 'minitest', '5.10.0'
+gem 'mutex_m', '~> 0.3.0'
 
 gemspec path: '../'

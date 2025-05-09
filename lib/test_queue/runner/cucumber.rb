@@ -15,6 +15,18 @@ module Cucumber
         title
       end
     end
+
+    class TreeWalker
+      private
+
+      def extract_method_name_from(call_stack)
+        if RUBY_VERSION >= '3.4.0'
+          call_stack[0].match(/in '(.*)'/).captures[0]
+        else
+          call_stack[0].match(/in `(.*)'/).captures[0]
+        end
+      end
+    end
   end
 
   class Runtime
@@ -54,7 +66,13 @@ module TestQueue
         runtime = @test_framework.runtime
         runtime.features = iterator
 
-        @test_framework.cli.execute!(runtime)
+        begin
+          @test_framework.cli.execute!(runtime)
+        rescue => e
+          warn "[worker #{Process.pid}] uncaught exception: #{e.class}: #{e.message}"
+          warn e.backtrace.join("\n")
+          exit! 1
+        end
 
         if runtime.respond_to?(:summary_report, true)
           runtime.send(:summary_report).test_cases.total_failed
