@@ -20,7 +20,7 @@ module Cucumber
       private
 
       def extract_method_name_from(call_stack)
-        if RUBY_VERSION.to_f == 3.4
+        if RUBY_VERSION >= '3.4.0'
           call_stack[0].match(/in '(.*)'/).captures[0]
         else
           call_stack[0].match(/in `(.*)'/).captures[0]
